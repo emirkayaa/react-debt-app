@@ -1,25 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Navigate, Route, BrowserRouter as Router, Routes, } from "react-router-dom";
+import "./App.css";
+import { Provider, useSelector } from "react-redux";
+import  {routes}  from "./Routes";
+import Navbar from "./Components/Navbar";
+import { store } from "./store";
+
 
 function App() {
+  const token = useSelector((state :any) => state.auth.token);
+  const  isAuth = token ? true : false;
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+   <div className="w-full">
+   <Provider store={store}>
+   <Router>
+      <div className={token ? 'flex' : ''}>
+       {token && <Navbar />}
+       <Routes>    
+        {routes.map((route) => {
+          return (
+            <Route
+              key={route.id}
+              path={route.path}
+              element={route.auth && !isAuth ? <Navigate to="/login" /> : <route.component />} 
+            />
+          );
+        })}
+       </Routes>
+      </div>
+      </Router>
+   </Provider>
+   </div>
+   
   );
 }
 
