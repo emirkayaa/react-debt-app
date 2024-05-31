@@ -73,7 +73,7 @@ function UpdateModal({ data }: { data: any }) {
     <div>
       <button
         onClick={openModal}
-        className="px-4 py-2 rounded-lg bg-slate-300 hover:bg-slate-200"
+        className="px-2 py-2 rounded-lg bg-slate-200 hover:bg-slate-100"
       >
         <img src={file} alt="dosya" />
       </button>
@@ -214,7 +214,7 @@ function UpdateModal({ data }: { data: any }) {
               required
             ></textarea>
           </div>
-        
+
           <div className="flex justify-between w-full items-center">
             <button
               type="submit"

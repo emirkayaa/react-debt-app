@@ -72,9 +72,9 @@ function Table() {
         <td className="border px-4 py-2">{moment(item.paymentStart).format('DD MM YYYY')}</td>
         <td className="border px-4 py-2">{item.installment}</td>
         <td className="border px-4 py-2">
-          <div className='flex justify-between items-center'>
+          <div className='flex justify-around items-center'>
             <UpdateModal data={item} />
-            <button onClick={() => deleteInstallement(item.id)} className="px-4 py-2 rounded-lg bg-slate-300 hover:bg-slate-200">
+            <button onClick={() => deleteInstallement(item.id)} className="px-2 py-2 rounded-lg bg-slate-200 hover:bg-slate-100">
               <img src={trash} alt="dosya" />
             </button>
           </div>
