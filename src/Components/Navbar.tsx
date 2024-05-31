@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
       <div className="border-t border-gray-800">
         <ul className="p-2">
           <li>
-            <NavLink to="/home" className="block py-2 text-gray-300 hover:text-white">
+            <NavLink to="/" className="block py-2 text-gray-300 hover:text-white">
               Ana Sayfa
             </NavLink>
           </li>

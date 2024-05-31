@@ -36,6 +36,7 @@ const Register: React.FC = () => {
     setError('');
     // Process registration
     axios.post(url + 'auth/register',{name,email,password}).then((res) => {
+        localStorage.setItem('token', res.data.data);
         dispatch(setToken(res.data.data));
     }).catch((err) => {
         setError(err);

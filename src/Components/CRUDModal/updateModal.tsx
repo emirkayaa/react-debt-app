@@ -1,7 +1,11 @@
+import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import React, { useState, useEffect } from "react";
+import file from "../../svg/file.svg";
 import axios from "axios";
-import { url } from "../api";
+import { url } from "../../api";
+import { useSelector } from "react-redux";
+import moment from "moment";
+import { toast } from "react-toastify";
 const customStyles = {
   content: {
     top: "50%",
@@ -13,7 +17,8 @@ const customStyles = {
   },
 };
 
-function Modals() {
+function UpdateModal({ data }: { data: any }) {
+  const [debt, setDebt] = useState([]);
   const [debtName, setDebtName] = useState("");
   const [lender, setLender] = useState("");
   const [debtAmount, setDebtAmount] = useState(0);
@@ -22,93 +27,55 @@ function Modals() {
   const [paymentStart, setPaymentStart] = useState("");
   const [installment, setInstallment] = useState(0);
   const [desc, setDesc] = useState("");
-  const [installments, setInstallments] = useState<
-    { paymentAmount: number; paymentDate: string }[]
-  >([]);
+  const token = useSelector((state: any) => state.auth.token);
   const [modalIsOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    setInstallments(
-      Array.from({ length: installment }, () => ({
-        paymentAmount: 0,
-        paymentDate: "",
-      }))
-    );
-  }, [installment]);
-
-  type Installment = { paymentAmount: number; paymentDate: string };
-
-  const handleInstallmentChange = (
-    index: number,
-    field: keyof Installment,
-    value: string | number
-  ) => {
-    const newInstallments = [...installments];
-    newInstallments[index] = { ...newInstallments[index], [field]: value };
-    setInstallments(newInstallments);
-  };
- 
-  const AddData = (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.log("User not logged in");
-      return;
-    }
-
-    axios
-      .post(
-        url + "finance/debt",
-        {
-          debtName: debtName,
-          lenderName: lender,
-          debtAmount: debtAmount,
-          interestRate: interestRate,
-          amount: debtAmount + (debtAmount * interestRate) / 100,
-          paymentStart: paymentStart,
-          installment: installment,
-          description: desc,
-          paymentPlan: installments,
-        },
-        {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        }
-      )
-      .then((res) => {
-        console.log("eklendi", res);
-        closeModal();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
   function openModal() {
     setIsOpen(true);
+    getDebt();
   }
 
   function closeModal() {
     setIsOpen(false);
-    setDebtName("");
-    setLender("");
-    setDebtAmount(0);
-    setInterestRate(0);
-    setAmount(0);
-    setPaymentStart("");
-    setInstallment(0);
-    setDesc("");
-    setInstallments([]);
   }
 
+  const getDebt = () =>{
+    axios.get(url + 'finance/payment-plans/' + data.id, {
+        headers: {
+            Authorization: 'Bearer ' + token
+        }
+    }).then(res =>{
+        setDebt(res.data.data)
+    }).catch(err => {
+        toast.error(err.response.data.message)
+    })
+  }
+  const updateData = (e: React.FormEvent) => {
+    axios.put(
+      url + "finance/debt/" + data?.id,
+      {
+        debtName: debtName,
+        lenderName: lender,
+        debtAmount: debtAmount,
+        interestRate: interestRate,
+        amount: debtAmount + (debtAmount * interestRate) / 100,
+        paymentStart: paymentStart,
+        installment: installment,
+        description: desc,
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      }
+    );
+  };
   return (
     <div>
       <button
         onClick={openModal}
-        className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="px-4 py-2 rounded-lg bg-slate-300 hover:bg-slate-200"
       >
-        Ekle
+        <img src={file} alt="dosya" />
       </button>
       <Modal
         isOpen={modalIsOpen}
@@ -118,7 +85,7 @@ function Modals() {
       >
         <form
           className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 overflow-auto max-h-svh"
-          onSubmit={AddData}
+          onSubmit={updateData}
         >
           <div>
             <label
@@ -130,7 +97,7 @@ function Modals() {
             <input
               id="debtName"
               type="text"
-              value={debtName}
+              value={data.debtName}
               onChange={(e) => setDebtName(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -146,7 +113,7 @@ function Modals() {
             <input
               id="debtPerson"
               type="text"
-              value={lender}
+              value={data?.lenderName}
               onChange={(e) => setLender(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -162,7 +129,7 @@ function Modals() {
             <input
               id="debtPayment"
               type="number"
-              value={debtAmount}
+              value={data?.debtAmount}
               onChange={(e) => setDebtAmount(Number(e.target.value))}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -177,7 +144,7 @@ function Modals() {
             </label>
             <input
               id="interest"
-              value={interestRate}
+              value={data?.interestRate}
               onChange={(e) => setInterestRate(Number(e.target.value))}
               type="number"
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -194,7 +161,7 @@ function Modals() {
             <input
               id="total"
               type="number"
-              value={debtAmount + (debtAmount * interestRate) / 100}
+              value={data?.amount}
               onChange={(e) => setAmount(Number(e.target.value))}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -210,7 +177,7 @@ function Modals() {
             <input
               id="startDate"
               type="date"
-              value={paymentStart}
+              value={moment(data?.paymentStart).format("YYYY-MM-DD")}
               onChange={(e) => setPaymentStart(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -226,7 +193,7 @@ function Modals() {
             <input
               id="installments"
               type="number"
-              value={installment}
+              value={data?.installment}
               onChange={(e) => setInstallment(Number(e.target.value))}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -241,56 +208,19 @@ function Modals() {
             </label>
             <textarea
               id="desc"
-              value={desc}
+              value={data?.description}
               onChange={(e) => setDesc(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             ></textarea>
           </div>
-
-          {installments.map((inst, index) => (
-            <div key={index} className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Taksit {index + 1} Tutarı ve Tarihi
-              </label>
-              <div className="flex space-x-4">
-                <input
-                  type="number"
-                  value={inst.paymentAmount}
-                  onChange={(e) =>
-                    handleInstallmentChange(
-                      index,
-                      "paymentAmount",
-                      Number(e.target.value)
-                    )
-                  }
-                  className="block w-1/2 px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  placeholder="Tutar"
-                  required
-                />
-                <input
-                  type="date"
-                  value={inst.paymentDate}
-                  onChange={(e) =>
-                    handleInstallmentChange(
-                      index,
-                      "paymentDate",
-                      e.target.value
-                    )
-                  }
-                  className="block w-1/2 px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                  required
-                />
-              </div>
-            </div>
-          ))}
-
+        
           <div className="flex justify-between w-full items-center">
             <button
               type="submit"
               className="px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 m-2"
             >
-              Ödeme Planı Oluştur
+              Güncelle
             </button>
             <button
               onClick={closeModal}
@@ -305,4 +235,4 @@ function Modals() {
   );
 }
 
-export default Modals;
+export default UpdateModal;

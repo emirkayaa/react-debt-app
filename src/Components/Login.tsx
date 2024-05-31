@@ -33,7 +33,7 @@ const Login: React.FC = () => {
     .then( (res) => {
       localStorage.setItem('token', res.data.data);
        dispatch(setToken(res.data.data));
-      navigate('/');
+        navigate('/');
     })
     .catch((err) => {
       setError(err);
