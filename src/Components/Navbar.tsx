@@ -1,9 +1,10 @@
 import React from 'react';
-import {  NavLink } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { clearToken } from '../authSlice';
-const Sidebar: React.FC = () => {
-   const dispatch = useDispatch();
+
+const Navbar: React.FC = () => {
+  const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch(clearToken())
     localStorage.removeItem('token');
@@ -11,32 +12,25 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-gray-100 h-screen w-64 flex flex-col">
-      <div className="p-4">
-        <h2 className="text-2xl font-bold">Dashboard</h2>
-      </div>
-      <div className="border-t border-gray-800">
-        <ul className="p-2">
-          <li>
-            <NavLink to="/" className="block py-2 text-gray-300 hover:text-white">
-              Ana Sayfa
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/dashboard" className="block py-2 text-gray-300 hover:text-white">
-              Profil
-            </NavLink>
-          </li>
-          <li>
-            <button onClick={handleSubmit} className="block py-2 text-gray-300 hover:text-white">
-              Çıkış Yap
-            </button>
-          </li>
-          
-        </ul>
-      </div>
-    </div>
+    <nav className="bg-gray-900 text-gray-100 flex justify-between items-center p-4">
+      <h2 className="text-2xl font-bold">Dashboard</h2>
+      <ul className="flex space-x-4">
+        <li>
+          <NavLink to="/" className="text-gray-300 hover:text-white">
+            Ana Sayfa
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/dashboard" className="text-gray-300 hover:text-white">
+            İstatistik
+          </NavLink>
+        </li>
+      <button onClick={handleSubmit} className="text-gray-300 hover:text-white">
+        Çıkış Yap
+      </button>
+      </ul>
+    </nav>
   );
 };
 
-export default Sidebar;
+export default Navbar;

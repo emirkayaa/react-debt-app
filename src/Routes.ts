@@ -1,8 +1,8 @@
-import Content from "./Components/Content";
-import Dashboard from "./Components/Dashboard";
-import Home from "./Components/Home";
-import Login from "./Components/Login";
-import Register from "./Components/Register";
+
+import Dashboard from "./Components/Views/Dashboard";
+import Home from "./Components/Views/Home";
+import Login from "./Components/Views/Login";
+import Register from "./Components/Views/Register";
 
 
 export const routes = [

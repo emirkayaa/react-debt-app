@@ -2,6 +2,9 @@ import Modal from "react-modal";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { url } from "../api";
+import { useDispatch } from "react-redux";
+import { fetchData } from "../store/reducers/tableReducer";
+import { AppDispatch } from "../store";
 const customStyles = {
   content: {
     top: "50%",
@@ -12,6 +15,7 @@ const customStyles = {
     transform: "translate(-50%, -50%)",
   },
 };
+Modal.setAppElement('#root');
 
 function Modals() {
   const [debtName, setDebtName] = useState("");
@@ -22,11 +26,12 @@ function Modals() {
   const [paymentStart, setPaymentStart] = useState("");
   const [installment, setInstallment] = useState(0);
   const [desc, setDesc] = useState("");
+  const [tableRefresh,setTableRefresh] = useState(false)
   const [installments, setInstallments] = useState<
     { paymentAmount: number; paymentDate: string }[]
   >([]);
   const [modalIsOpen, setIsOpen] = useState(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   useEffect(() => {
     setInstallments(
       Array.from({ length: installment }, () => ({
@@ -79,6 +84,7 @@ function Modals() {
       .then((res) => {
         console.log("eklendi", res);
         closeModal();
+        dispatch(fetchData());
       })
       .catch((err) => {
         console.log(err);
@@ -298,6 +304,8 @@ function Modals() {
             >
               Close
             </button>
+            
+            
           </div>
         </form>
       </Modal>

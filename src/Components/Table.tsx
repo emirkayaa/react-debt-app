@@ -1,91 +1,87 @@
-import  { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import {url} from '../api';
-import { useSelector } from 'react-redux';
 import moment from 'moment';
-import trash from '../svg/trash.svg'
-import { toast } from "react-toastify";
+import trash from '../svg/trash.svg';
+import { toast } from 'react-toastify';
 import UpdateModal from './CRUDModal/updateModal';
+import { fetchData } from '../store/reducers/tableReducer';
+import { RootState, AppDispatch } from '../store';
+import { url } from '../api';
+import Payment from './CRUDModal/paymentModal';
+import 'react-toastify/dist/ReactToastify.css';
 
+const Table: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const data = useSelector((state: RootState) => state.table.data);
+  const token = useSelector((state: RootState) => state.auth.token);
 
+  useEffect(() => {
+    dispatch(fetchData());
+  }, [dispatch]);
 
-function Table() {
-
-    const token = useSelector((state :any) => state.auth.token);
-    const [data, setData] = useState([])
-
-
-    const deleteInstallement = (id:number) =>{
-      axios.delete(url + 'finance/debt/' + id,
-      {
+  const deleteInstallement = async (id: number) => {
+    try {
+      await axios.delete(url + `finance/debt/${id}`, {
         headers: {
-          Authorization: 'Bearer ' + token
-        }
-      }
-
-      ).then((res) => {
-        toast.success("Borç başarıyla silindi")
-        getData()
-      }).catch((err) => {
-        toast.error(err.response.data.message)
-      })
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success('Borç başarıyla silindi');
+      dispatch(fetchData());
+    } catch (error) {
+      console.error(error);
+      toast.error('Borç silinirken bir hata oluştu');
     }
+  };
 
-
-   const  getData = () =>{
-      axios.get(url + 'finance/debt', {
-        headers: {
-            Authorization: 'Bearer ' + token 
-        }
-    }).then((res) => {
-       setData(res.data.data)
-    }).catch((err) => {
-        console.log(err);
-    });
-    }
-    useEffect(() => {
-        getData()
-    }, [setData])
   return (
-    <div className=" max-h-screen overflow-auto">
-     <table className="w-full my-2 border text-center border-gray-200 shadow-lg">
-  <thead className="bg-gray-100">
-    <tr>
-      <th className="px-4 py-2 text-gray-800">Borç Adı</th>
-      <th className="px-4 py-2 text-gray-800">Borç Veren</th>
-      <th className="px-4 py-2 text-gray-800">Borç Miktarı</th>
-      <th className="px-4 py-2 text-gray-800">Faiz Oranı</th>
-      <th className="px-4 py-2 text-gray-800">Toplam</th>
-      <th className="px-4 py-2 text-gray-800">Başlangıç Tarihi</th>
-      <th className="px-4 py-2 text-gray-800">Taksit Sayısı</th>
-      <th className="px-4 py-2 text-gray-800">İncele</th>
-    </tr>
-  </thead>
-  <tbody>
-    {data.map((item:any) => (
-      <tr key={item.id} className="bg-gray-50">
-        <td className="border px-4 py-2">{item.debtName}</td>
-        <td className="border px-4 py-2">{item.lenderName}</td>
-        <td className="border px-4 py-2">{item.debtAmount}</td>
-        <td className="border px-4 py-2">{item.interestRate}%</td>
-        <td className="border px-4 py-2">{item.amount}</td>
-        <td className="border px-4 py-2">{moment(item.paymentStart).format('DD MM YYYY')}</td>
-        <td className="border px-4 py-2">{item.installment}</td>
-        <td className="border px-4 py-2">
-          <div className='flex justify-around items-center'>
-            <UpdateModal data={item} />
-            <button onClick={() => deleteInstallement(item.id)} className="px-2 py-2 rounded-lg bg-slate-200 hover:bg-slate-100">
-              <img src={trash} alt="dosya" />
-            </button>
-          </div>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-
+    <div className="max-h-screen overflow-auto">
+      <div className="table-responsive">
+        <table className="w-full my-2 border text-center border-gray-200 shadow-lg">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Borç Adı</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Borç Veren</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Borç Miktarı</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Faiz Oranı</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Toplam</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Başlangıç Tarihi</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">Taksit Sayısı</th>
+              <th className="px-2 md:px-4 py-2 text-gray-800">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item: any) => (
+              <tr key={item.id} className="bg-gray-50">
+                <td className="border px-2 md:px-4 py-2">{item.debtName}</td>
+                <td className="border px-2 md:px-4 py-2">{item.lenderName}</td>
+                <td className="border px-2 md:px-4 py-2">{item.debtAmount}</td>
+                <td className="border px-2 md:px-4 py-2">{item.interestRate}%</td>
+                <td className="border px-2 md:px-4 py-2">{item.amount}</td>
+                <td className="border px-2 md:px-4 py-2">
+                  {moment(item.paymentStart).format('DD MM YYYY')}
+                </td>
+                <td className="border px-2 md:px-4 py-2">{item.installment}</td>
+                <td className="border px-2 md:px-4 py-2">
+                  <div className="flex justify-around items-center">
+                    <Payment data={item} />
+                    <UpdateModal data={item} />
+                    <button
+                      onClick={() => deleteInstallement(item.id)}
+                      className="p-1 rounded-lg bg-slate-200 hover:bg-slate-100"
+                    >
+                      <img src={trash} width={30} alt="dosya" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
-}
+};
 
 export default Table;

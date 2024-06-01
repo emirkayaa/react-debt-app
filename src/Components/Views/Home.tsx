@@ -1,15 +1,16 @@
-import React from "react";
-import Table from "./Table";
-import Modal from 'react-modal';
-import Modals from "./Modal";
+
+import Table from "../Table";
+import Modals from "../Modal";
 
     function Home() {
-    
+    const handleRefresh = (e : any) => {
+        console.log(e)
+    }
       return (
         <div className="p-3 w-full">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold text-center">Borç Takip Sayfası</h2>
-              <Modals />
+              <Modals  />
             </div>
             <Table />
         </div>

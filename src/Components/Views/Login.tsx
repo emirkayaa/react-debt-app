@@ -1,13 +1,13 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../authSlice';
-import { url } from '../api';
+import { setToken } from '../../authSlice';
+import { url } from '../../api';
 import { useNavigate , NavLink } from 'react-router-dom';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('erto@erto.com');
+  const [password, setPassword] = useState('123456');
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();

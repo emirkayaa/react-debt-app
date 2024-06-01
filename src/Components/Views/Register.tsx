@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {  useDispatch } from 'react-redux';
-import { url } from '../api';
-import { setToken } from '../authSlice';
+import { url } from '../../api';
+import { setToken } from '../../authSlice';
 
 
 
