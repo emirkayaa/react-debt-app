@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "react-modal";
-import file from "../../svg/file.svg";
-import { useSelector } from "react-redux";
 import moment from "moment";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileLines } from "@fortawesome/free-solid-svg-icons";
+
+const file = require('../../svg/file.svg') as string;
 
 const customStyles = {
   content: {
@@ -16,7 +18,7 @@ const customStyles = {
 };
 Modal.setAppElement("#root");
 function UpdateModal({ data }: { data: any }) {
-  const token = useSelector((state: any) => state.auth.token);
+  // const token = useSelector((state: any) => state.auth.token);
   const [modalIsOpen, setIsOpen] = useState(false);
   function openModal() {
     setIsOpen(true);
@@ -32,8 +34,7 @@ function UpdateModal({ data }: { data: any }) {
         onClick={openModal}
         className="p-1 rounded-lg bg-slate-200 hover:bg-slate-100"
       >
-        <img src={file} width={30} alt="dosya" />
-      </button>
+    <FontAwesomeIcon icon={faFileLines} width={32} />      </button>
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

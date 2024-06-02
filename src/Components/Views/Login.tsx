@@ -20,7 +20,7 @@ const Login: React.FC = () => {
       return;
     }
 
-    // Basic email validation
+    
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
@@ -28,12 +28,11 @@ const Login: React.FC = () => {
     }
 
     setError('');
-    // Process login
    axios.post(url + 'auth/login', { email, password })
     .then( (res) => {
       localStorage.setItem('token', res.data.data);
        dispatch(setToken(res.data.data));
-        navigate('/');
+      navigate('/');
     })
     .catch((err) => {
       setError(err);

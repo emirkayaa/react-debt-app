@@ -17,7 +17,7 @@ const initialState: DataState = {
 
 export const fetchData = createAsyncThunk('data/fetchData', async (_, { getState }) => {
   const state = getState() as RootState;
-  const token = state.auth.token;
+  const token = localStorage.getItem('token') || state.auth.token;
   const response = await axios.get(url + 'finance/debt', {
     headers: {
       Authorization: `Bearer ${token}`,

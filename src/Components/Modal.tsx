@@ -91,6 +91,10 @@ function Modals() {
       });
   };
 
+  const handleFocus = (event: any) => {
+    event.target.select();
+  };
+
   function openModal() {
     setIsOpen(true);
   }
@@ -137,6 +141,7 @@ function Modals() {
               id="debtName"
               type="text"
               value={debtName}
+              onFocus={handleFocus}
               onChange={(e) => setDebtName(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -153,6 +158,7 @@ function Modals() {
               id="debtPerson"
               type="text"
               value={lender}
+              onFocus={handleFocus}
               onChange={(e) => setLender(e.target.value)}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -169,6 +175,7 @@ function Modals() {
               id="debtPayment"
               type="number"
               value={debtAmount}
+              onFocus={handleFocus}
               onChange={(e) => setDebtAmount(Number(e.target.value))}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
@@ -184,6 +191,7 @@ function Modals() {
             <input
               id="interest"
               value={interestRate}
+              onFocus={handleFocus}
               onChange={(e) => setInterestRate(Number(e.target.value))}
               type="number"
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -200,6 +208,8 @@ function Modals() {
             <input
               id="total"
               type="number"
+              disabled
+              onFocus={handleFocus}
               value={debtAmount + (debtAmount * interestRate) / 100}
               onChange={(e) => setAmount(Number(e.target.value))}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -233,7 +243,10 @@ function Modals() {
               id="installments"
               type="number"
               value={installment}
+              onFocus={handleFocus}
               onChange={(e) => setInstallment(Number(e.target.value))}
+              max={12}
+              maxLength={2}
               className="block w-full px-3 py-2 mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               required
             />
