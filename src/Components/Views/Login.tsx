@@ -4,10 +4,12 @@ import { useDispatch } from 'react-redux';
 import { setToken } from '../../authSlice';
 import { url } from '../../api';
 import { useNavigate , NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('erto@erto.com');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();

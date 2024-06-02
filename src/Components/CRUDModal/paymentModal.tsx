@@ -25,7 +25,7 @@ function Payment({ data }: { data: any }) {
   const [paymentData, setPaymentData] = useState([]);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [hasData, setHasData] = useState(true); // Veri var mı yok mu kontrolü için state
+  const [hasData, setHasData] = useState(true); 
 
   useEffect(() => {
     if (modalIsOpen) {
@@ -46,11 +46,10 @@ function Payment({ data }: { data: any }) {
       .then((response) => {
         setPaymentData(response.data.data.paymentPlan);
         if(response.data.data.paymentPlan.length === 0) {
-          setHasData(false); // Eğer veri yoksa hasData state'ini false yap
+          setHasData(false);
         } else {
-          setHasData(true); // Eğer veri varsa hasData state'ini true yap
+          setHasData(true); 
         }
-        console.log(response.data.data);
       })
       .catch((error) => {
         console.error("Error fetching payment data:", error);
@@ -100,7 +99,7 @@ function Payment({ data }: { data: any }) {
         style={customStyles}
         contentLabel="Payment Modal"
       >
-        {hasData ? ( // Veri varsa tabloyu göster
+        {hasData ? ( 
           <form className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8 overflow-auto max-h-svh">
             {paymentData.map((payment: any, index: number) => (
               <div className="flex flex-col space-y-4" key={payment.id}>

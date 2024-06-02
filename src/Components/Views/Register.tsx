@@ -3,6 +3,7 @@ import axios from 'axios';
 import {  useDispatch } from 'react-redux';
 import { url } from '../../api';
 import { setToken } from '../../authSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -12,6 +13,7 @@ const Register: React.FC = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
     const dispatch = useDispatch();
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +23,6 @@ const Register: React.FC = () => {
       return;
     }
 
-    // Basic email validation
     const emailRegex = /\S+@\S+\.\S+/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
@@ -34,10 +35,12 @@ const Register: React.FC = () => {
     }
 
     setError('');
-    // Process registration
+    
     axios.post(url + 'auth/register',{name,email,password}).then((res) => {
         localStorage.setItem('token', res.data.data);
         dispatch(setToken(res.data.data));
+        navigate('/login');
+
     }).catch((err) => {
         setError(err);
     })

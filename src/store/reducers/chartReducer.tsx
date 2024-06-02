@@ -18,7 +18,6 @@
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log('Gelen veriler:', response.data);
         return response.data.data;
       });
 

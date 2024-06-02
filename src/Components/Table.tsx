@@ -16,7 +16,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 const Table: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const data = useSelector((state: RootState) => state.table.data);
-  const isLoading = useSelector((state: RootState) => state.table.loading); // loading state
+  const isLoading = useSelector((state: RootState) => state.table.loading);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Table: React.FC = () => {
   return (
     <div className="max-h-screen overflow-auto">
       <div className="table-responsive">
-        {isLoading ? ( // if loading is true, show the loader
+        {isLoading ? ( 
           <div className="flex justify-center items-center h-64">
             <ClipLoader size={35} color={"#00BFFF"} loading={isLoading} />
           </div>

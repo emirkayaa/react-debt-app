@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../../store';
 import { fetchData } from '../../store/reducers/tableReducer';
 
-// Gerekli bileşenlerin kaydedilmesi
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function Dashboard() {

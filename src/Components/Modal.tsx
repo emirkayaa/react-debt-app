@@ -57,7 +57,6 @@ function Modals() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     if (!token) {
-      console.log("User not logged in");
       return;
     }
 
@@ -82,7 +81,6 @@ function Modals() {
         }
       )
       .then((res) => {
-        console.log("eklendi", res);
         closeModal();
         dispatch(fetchData());
       })

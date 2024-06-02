@@ -23,7 +23,6 @@ export const fetchData = createAsyncThunk('data/fetchData', async (_, { getState
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log('Gelen veriler:', response.data);
   return response.data.data;
 });
 
@@ -40,7 +39,6 @@ const dataSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchData.fulfilled, (state, action) => {
-        console.log('Redux store verileri:', action.payload); // Redux store'a yerleştirilen verileri kontrol et
         if (Array.isArray(action.payload)) {
           state.loading = false;
           state.data = action.payload;
