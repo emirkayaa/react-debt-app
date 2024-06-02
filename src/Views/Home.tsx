@@ -1,6 +1,6 @@
 
-import Table from "../Table";
-import Modals from "../Modal";
+import Table from "../Components/Table";
+import Modals from "../Components/Modal";
 
     function Home() {
 

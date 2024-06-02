@@ -8,8 +8,8 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import 'tailwindcss/tailwind.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../store';
-import { fetchData } from '../../store/reducers/tableReducer';
+import { AppDispatch } from '../store';
+import { fetchData } from '../store/reducers/tableReducer';
 
 
 ChartJS.register(ArcElement, Tooltip, Legend);

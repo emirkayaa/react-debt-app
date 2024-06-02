@@ -1,8 +1,8 @@
 
-import Dashboard from "./Components/Views/Dashboard";
-import Home from "./Components/Views/Home";
-import Login from "./Components/Views/Login";
-import Register from "./Components/Views/Register";
+import Dashboard from "./Views/Dashboard";
+import Home from "./Views/Home";
+import Login from "./Views/Login";
+import Register from "./Views/Register";
 
 export const routes = [
     {
